@@ -4,10 +4,13 @@
 class FBullCowGame
 {
 public:
+	FBullCowGame(); // constructor
+
+	int GetMaxTries() const; //avoid modification. Useful for getters
+	int GetCurrentTry() const;
+	bool IsGameWon() const;
+
 	void Reset(int WordLength);
-	int GetMaxTries();
-	int GetCurrentTry();
-	bool IsGameWon();
 	bool CheckGuessValidity(std::string);
 
 private:
