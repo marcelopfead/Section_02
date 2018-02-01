@@ -1,4 +1,6 @@
 #include "FBullCowGame.h"
+#include <map>
+#define TMap std::map
 
 
 FBullCowGame::FBullCowGame()
@@ -15,8 +17,9 @@ int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); 
 
 bool FBullCowGame::IsGameWon() const
 {
-	return false;
+	return bGameIsWon;
 }
+
 
 void FBullCowGame::Reset(int32 WordLength)
 {
@@ -24,15 +27,29 @@ void FBullCowGame::Reset(int32 WordLength)
 	const FString HiddenWord = "planet";
 	MyHiddenWord = HiddenWord;
 	MyCurrentTry = 1;
-	return;
+	bGameIsWon = false;
 }
 
-EWordStatus FBullCowGame::CheckGuessValidity(FString Guess) const
+EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 {
-	return EWordStatus::OK;
+	if (!IsIsogram(Guess))
+	{
+		return EGuessStatus::Not_Isogram;
+	} 
+	else if (!IsLowerCase(Guess))
+	{
+		return EGuessStatus::Not_Lowercase;
+	}
+	else if (Guess.length() != GetHiddenWordLength())
+	{
+		return EGuessStatus::Wrong_Length;
+	}
+	else {
+		return EGuessStatus::OK;
+	}
 }
 
-FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
+FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 {
 	//increment the turn number
 	MyCurrentTry++;
@@ -52,17 +69,33 @@ FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
 			{
 				if (i == j) 
 				{
-				
 					BullCowCount.Bulls++;
 				}
 				else 
 				{
-				
 					BullCowCount.Cows++;
 				}
 			}		
 		}
 	}
+	if (BullCowCount.Bulls == HiddenWordLength)
+	{
+		bGameIsWon = true;
+	}
+	else {
+		bGameIsWon = false;
+	}
 
 	return BullCowCount;
+}
+
+bool FBullCowGame::IsIsogram(FString Guess) const
+{
+	//TMap<char, bool> Letters;
+	return true;
+}
+
+bool FBullCowGame::IsLowerCase(FString Guess) const
+{
+	return true;
 }
