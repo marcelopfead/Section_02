@@ -91,7 +91,25 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 
 bool FBullCowGame::IsIsogram(FString Guess) const
 {
-	//TMap<char, bool> Letters;
+	//treat 0 or 1
+	if (Guess.length() <= 1) { return true; }
+
+	TMap<char, bool> LetterSeen;
+
+	for (auto Letter : Guess) 
+	{
+		Letter = tolower(Letter);
+
+		if (LetterSeen[Letter])
+		{
+			return false;
+		}
+		else
+		{
+			LetterSeen[Letter] = true;
+		}
+	}
+
 	return true;
 }
 
